@@ -15,7 +15,7 @@ Specifically, we will be making individual jellyfish costumes. We will all be co
 9. Velcro
 10. Zip ties
 
-## Step 1: Making the legs
+## Making the Jellyfish
 For this step of the tutorial, we will be wiring each LED to the power side of the power rail, the ground side of the power rail, and the input pins of the Arduino board. We have already velcroed the battery pack to the Arduino, connected the 5V power pin to the left power rail, and the ground pin to the right power rail. 
 
 ### LED strips
@@ -27,5 +27,8 @@ The Neopixel ring also has a power wire, ground wire, and input wire. Wire the p
 ### Pulse sensor
 The pulse sensor has a power wire, ground wire and input wire. Wire the power wire to the power rail, the ground wire to the ground rail, and the input wire to pin A0 (on the analog pin side of the board).
 
-### Running the code
-Plug your Arduino into your computer, and run the 
+### Upload the code
+Plug your Arduino into your computer, and run nervous_networks_blue.ino. Clip the pulse sensor onto your ear. The ring should light up blue, and the legs should light up blue to your heartbeats. Then unplug the wire, and plug the red wire of the battery pack into the Vin pin of the Arduino. Plug the ground wire of the battery pack into the Arduino ground. Turn on the battery pack. Your jellyfish module should work!
+
+### Decorate your jellyfish
+Decorate your legs with ribbon!
