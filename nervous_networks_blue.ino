@@ -26,11 +26,17 @@ Adafruit_NeoPixel pixelStrip100_3 = Adafruit_NeoPixel(STRIP100_NUMPIXELS, STRIPP
 
 Adafruit_NeoPixel pixelRing = Adafruit_NeoPixel(RINGNUMPIXELS, RINGPIN, NEO_GRB + NEO_KHZ800);
 int delayval = 20; // timing delay in milliseconds
-int redColor = 0;
-int greenColor = 10;
-int blueColor = 20;
+int baseRedColor = 0;
+int baseGreenColor = 10;
+int baseBlueColor = 20;
+float redColor;
+float blueColor;
+float greenColor;
 int offColor = 0;
 bool beat = false;
+float heartrate_avg = 0;
+float heartrates[10];
+int index = 0;
 
 // PULSE SETUP
 int const PULSE_SENSOR_PIN = 0;
@@ -62,8 +68,29 @@ void setup() {
 }
 
 void loop() {
+  if (index % 10 == 0) {
+    for (int i = 0; i < 10; i++) {
+      heartrate_avg = heartrate_avg + heartrates[i];
+    }
+    heartrate_avg = heartrate_avg / 10;
 
+    if (heartrate_avg > 500) {
+    redColor = baseRedColor * (heartrate_avg - 500) / 50;
+    blueColor = baseBlueColor * (heartrate_avg - 500) / 50;
+    greenColor = baseGreenColor * (heartrate_avg - 500) / 50;
+    }
+    else {
+      redColor = baseRedColor;
+      blueColor = baseBlueColor;
+      greenColor = baseGreenColor;
+    }
+    
+  } 
+  
   Signal = analogRead(PULSE_SENSOR_PIN); // Read the sensor value
+  
+  heartrates[index % 10] = Signal;
+  
   push(STRIP50_state, 0, 50);
   push(STRIP100_state, 0, 100);
 
@@ -80,17 +107,11 @@ void loop() {
           pixelRing.setPixelColor(i, pixelRing.Color(redColor, greenColor, blueColor));
         }
       }
-   
-//    Serial.println(Signal);
-//    Serial.println("beating");
+
     addPulse();
     beating = true;
   }
-//  else {
-//      for (int i=0; i < RINGNUMPIXELS; i++) {
-//        pixelRing.setPixelColor(i, pixelRing.Color(offColor, offColor, offColor));
-//      }
-//  }
+
   for (int i=0; i < STRIP50_NUMPIXELS; i++) {
     Serial.print(STRIP50_state[i]);
   }
@@ -119,31 +140,8 @@ void loop() {
     }
     
     showPixels();
-  
-//  if (beating == false && Signal > Threshold) {
-//    beat = true;
-//  }
-//  if(Signal > Threshold){                // If the signal is above threshold, turn on the LED
-//    beating = true;
-//  }
-//  else {
-//    beating = false;
-//  }
-//
-//  if (beat == true) {
-//    Serial.println("beat");
-//    addPulse();
-//    pixelStrip50_1.show();
-//    pixelStrip50_2.show();
-//    pixelStrip100_1.show();
-//    pixelStrip100_2.show();
-//    pixelStrip100_3.show();
-////  initiatePulse();
-//
-//    beat = false;
-//  }
-//
   delay(delayval);
+  index ++;
 
 }
 
@@ -191,57 +189,3 @@ void clearColors() {
     pixelRing.setPixelColor(i, pixelRing.Color(offColor, offColor, offColor));
     }
 }
-
-//void initiatePulse() {
-////  Serial.println("light pulse");
-//
-//  for (int i=0; i < RINGNUMPIXELS; i++) {
-//    pixelRing.setPixelColor(i, pixelRing.Color(redColor, greenColor, blueColor));
-//    pixelRing.show();
-//  }
-//  
-//  
-//  for (int i=0; i < STRIP100_NUMPIXELS; i++) {
-//    // pixels.Color takes RGB values, from 0,0,0 up to 255,255,255
-//    pixelStrip50_1.setPixelColor(i, pixelStrip50_1.Color(redColor, greenColor, blueColor));
-//    pixelStrip50_2.setPixelColor(i, pixelStrip50_2.Color(redColor, greenColor, blueColor));
-//    pixelStrip100_1.setPixelColor(i, pixelStrip100_1.Color(redColor, greenColor, blueColor));
-//    pixelStrip100_2.setPixelColor(i, pixelStrip100_2.Color(redColor, greenColor, blueColor));
-//    pixelStrip100_2.setPixelColor(i, pixelStrip100_3.Color(redColor, greenColor, blueColor));
-////    pixelStrip50_16.setPixelColor(i, pixelStrip50_16.Color(redColor, greenColor, blueColor));
-//
-//    pixelStrip50_1.setPixelColor(i-3, pixelStrip50_1.Color(offColor, offColor, offColor));
-//    pixelStrip50_2.setPixelColor(i-3, pixelStrip50_2.Color(offColor, offColor, offColor));
-//    pixelStrip100_1.setPixelColor(i-3, pixelStrip100_1.Color(offColor, offColor, offColor));
-//    pixelStrip100_2.setPixelColor(i-3, pixelStrip100_2.Color(offColor, offColor, offColor));
-//    pixelStrip100_3.setPixelColor(i-3, pixelStrip100_3.Color(offColor, offColor, offColor));
-////    pixelStrip50_16.setPixelColor(i-3, pixelStrip50_16.Color(offColor, offColor, offColor));
-//
-//    if (i < 3) {
-//      pixelStrip50_1.setPixelColor(STRIP100_NUMPIXELS - i-1, pixelStrip50_1.Color(offColor, offColor, offColor));
-//      pixelStrip50_2.setPixelColor(STRIP100_NUMPIXELS - i-1, pixelStrip50_2.Color(offColor, offColor, offColor));
-//      pixelStrip100_1.setPixelColor(STRIP100_NUMPIXELS - i-1, pixelStrip100_1.Color(offColor, offColor, offColor));
-//      pixelStrip100_2.setPixelColor(STRIP100_NUMPIXELS - i-1, pixelStrip100_2.Color(offColor, offColor, offColor));
-//      pixelStrip100_3.setPixelColor(STRIP100_NUMPIXELS - i-1, pixelStrip100_3.Color(offColor, offColor, offColor));
-////      pixelStrip50_16.setPixelColor(STRIP100_NUMPIXELS - i-1, pixelStrip50_16.Color(offColor, offColor, offColor));
-//
-//    }
-//
-//    // This sends the updated pixel color to the hardware.
-//    pixelStrip50_1.show();
-//    pixelStrip50_2.show();
-//    pixelStrip100_1.show();
-//    pixelStrip100_2.show();
-//    pixelStrip100_3.show();
-////    pixelStrip50_16.show();
-//
-//
-//    delay(delayval);
-//  }
-//
-//  for (int i=0; i < RINGNUMPIXELS; i++) {
-//    pixelRing.setPixelColor(i, pixelRing.Color(offColor, offColor, offColor));
-//    pixelRing.show();
-//  }
-//  
-//}
