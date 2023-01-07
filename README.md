@@ -1,4 +1,7 @@
 # Nervous Network
+
+// Peggy Yin '25, Alice Cai '25, AnhPhu Nguyen '25
+
 Nervous Network is a social experiment using wearable technology to illustrate the collective experience of fright.
 
 Specifically, we will be making individual jellyfish costumes. We will all be connected to each other, like the nodes in a neural network, through the jellyfish legs. Our legs will light up in accordance with our pulse, such that as we get more scared and our hearts beat faster, the network begins to light up more in certain spots depending on who is scared, thereby giving "weight" to certain connections in the network. As captured by photography, these "Nervous Network" visualizations will be unique to every collective experience of fear.
